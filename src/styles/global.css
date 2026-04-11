@@ -2,6 +2,7 @@
 
 @layer base {
   .prose h1 { @apply text-2xl font-bold mb-4 mt-6 first:mt-0; }
+  .prose > h1:first-child { display: none; }
   .prose h2 { @apply text-xl font-bold mb-3 mt-6; }
   .prose h3 { @apply text-lg font-semibold mb-2 mt-4; }
   .prose p { @apply mb-3 leading-relaxed; }
@@ -29,9 +30,9 @@
   main { margin-left: 0 !important; padding: 0 !important; }
   .max-w-4xl { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
-  /* Show both tabs content when printing */
-  #tab-homework { display: block !important; }
-  #tab-handout::after { content: ''; display: block; border-top: 1pt solid #ccc; margin: 8pt 0; }
+  /* Print only the active tab */
+  .prose.hidden { display: none !important; }
+  .prose.print-active { display: block !important; }
 
   /* Compact headings */
   .prose h1 { font-size: 13pt !important; margin: 6pt 0 3pt !important; }

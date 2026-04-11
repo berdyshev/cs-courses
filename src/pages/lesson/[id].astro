@@ -65,6 +65,8 @@ const shortTitle = `Урок ${lessonNum}`;
           </button>
         </div>
 
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">{handoutEntry?.data.title ?? shortTitle}</h1>
+
         <div class="no-print mb-6">
           <div class="border-b border-gray-200">
             <nav class="-mb-px flex gap-1" id="tab-nav">
@@ -86,7 +88,7 @@ const shortTitle = `Урок ${lessonNum}`;
           </div>
         </div>
 
-        <div id="tab-handout" class="prose max-w-none">
+        <div id="tab-handout" class="prose max-w-none print-active">
           {HandoutContent ? <HandoutContent /> : <p>Матеріал відсутній</p>}
         </div>
 
@@ -110,14 +112,18 @@ const shortTitle = `Урок ${lessonNum}`;
 
     if (tab === 'handout') {
       handoutContent?.classList.remove('hidden');
+      handoutContent?.classList.add('print-active');
       homeworkContent?.classList.add('hidden');
+      homeworkContent?.classList.remove('print-active');
       activeClass.forEach(c => handoutBtn?.classList.add(c));
       inactiveClass.forEach(c => handoutBtn?.classList.remove(c));
       inactiveClass.forEach(c => homeworkBtn?.classList.add(c));
       activeClass.forEach(c => homeworkBtn?.classList.remove(c));
     } else {
       handoutContent?.classList.add('hidden');
+      handoutContent?.classList.remove('print-active');
       homeworkContent?.classList.remove('hidden');
+      homeworkContent?.classList.add('print-active');
       activeClass.forEach(c => homeworkBtn?.classList.add(c));
       inactiveClass.forEach(c => homeworkBtn?.classList.remove(c));
       inactiveClass.forEach(c => handoutBtn?.classList.add(c));
