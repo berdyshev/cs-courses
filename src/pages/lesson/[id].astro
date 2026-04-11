@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('lessons');
+  const ids = [...new Set(entries.map(e => e.data.lesson))].sort((a, b) => a - b);
+  return ids.map(id => ({ params: { id: String(id) } }));
+}
+
+const { id } = Astro.params;
+const lessonNum = parseInt(id!, 10);
+
+const allEntries = await getCollection('lessons');
+
+const handoutEntry = allEntries.find(e => e.data.lesson === lessonNum && e.data.type === 'handout');
+const homeworkEntry = allEntries.find(e => e.data.lesson === lessonNum && e.data.type === 'homework');
+
+const { Content: HandoutContent } = handoutEntry ? await render(handoutEntry) : { Content: null };
+const { Content: HomeworkContent } = homeworkEntry ? await render(homeworkEntry) : { Content: null };
+
+const lessonEntries = allEntries
+  .filter(e => e.data.type === 'handout')
+  .sort((a, b) => a.data.lesson - b.data.lesson);
+
+const shortTitle = `Урок ${lessonNum}`;
+---
+<Layout pageTitle={shortTitle}>
+  <div class="flex min-h-screen">
+    <nav class="no-print w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col">
+      <div class="p-4 border-b border-gray-200">
+        <h1 class="text-sm font-bold text-gray-800 leading-tight">План уроків з PyGame Zero</h1>
+      </div>
+      <ul class="flex-1 overflow-y-auto py-2">
+        {lessonEntries.map(entry => (
+          <li>
+            <a
+              href={`/lesson/${entry.data.lesson}`}
+              class={`flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-blue-50 hover:text-blue-700 ${
+                entry.data.lesson === lessonNum
+                  ? 'bg-blue-50 text-blue-700 font-semibold border-r-2 border-blue-600'
+                  : 'text-gray-700'
+              }`}
+            >
+              <span class="mr-2 text-xs font-mono text-gray-400">{String(entry.data.lesson).padStart(2, '0')}</span>
+              Урок {entry.data.lesson}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <main class="flex-1 overflow-y-auto">
+      <div class="max-w-4xl mx-auto px-8 py-8">
+        <div class="flex items-start justify-between mb-6 no-print">
+          <div></div>
+          <button
+            onclick="window.print()"
+            class="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Друк
+          </button>
+        </div>
+
+        <div class="no-print mb-6">
+          <div class="border-b border-gray-200">
+            <nav class="-mb-px flex gap-1" id="tab-nav">
+              <button
+                id="tab-handout-btn"
+                onclick="switchTab('handout')"
+                class="tab-btn px-5 py-2.5 text-sm font-medium border-b-2 border-blue-600 text-blue-600"
+              >
+                Урок
+              </button>
+              <button
+                id="tab-homework-btn"
+                onclick="switchTab('homework')"
+                class="tab-btn px-5 py-2.5 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              >
+                Домашнє завдання
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div id="tab-handout" class="prose max-w-none">
+          {HandoutContent ? <HandoutContent /> : <p>Матеріал відсутній</p>}
+        </div>
+
+        <div id="tab-homework" class="prose max-w-none hidden">
+          {HomeworkContent ? <HomeworkContent /> : <p>Матеріал відсутній</p>}
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>
+
+<script is:inline>
+  function switchTab(tab) {
+    const handoutBtn = document.getElementById('tab-handout-btn');
+    const homeworkBtn = document.getElementById('tab-homework-btn');
+    const handoutContent = document.getElementById('tab-handout');
+    const homeworkContent = document.getElementById('tab-homework');
+
+    const activeClass = ['border-blue-600', 'text-blue-600'];
+    const inactiveClass = ['border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300'];
+
+    if (tab === 'handout') {
+      handoutContent?.classList.remove('hidden');
+      homeworkContent?.classList.add('hidden');
+      activeClass.forEach(c => handoutBtn?.classList.add(c));
+      inactiveClass.forEach(c => handoutBtn?.classList.remove(c));
+      inactiveClass.forEach(c => homeworkBtn?.classList.add(c));
+      activeClass.forEach(c => homeworkBtn?.classList.remove(c));
+    } else {
+      handoutContent?.classList.add('hidden');
+      homeworkContent?.classList.remove('hidden');
+      activeClass.forEach(c => homeworkBtn?.classList.add(c));
+      inactiveClass.forEach(c => homeworkBtn?.classList.remove(c));
+      inactiveClass.forEach(c => handoutBtn?.classList.add(c));
+      activeClass.forEach(c => handoutBtn?.classList.remove(c));
+    }
+  }
+
+  window.switchTab = switchTab;
+</script>
