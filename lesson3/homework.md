@@ -6,50 +6,74 @@ title: "УРОК 3. ДОМАШНЄ ЗАВДАННЯ"
 
 # УРОК 3. ДОМАШНЄ ЗАВДАННЯ
 
-Створи програму з **кораблем або птахом, яким ти керуєш зі швидкістю й спеціальною дією**.
+Створи програму з **підводним мешканцем, яким ти керуєш**.
 
 **Завдання:**
 
-1. Створи спрайт (корабель `sship5`, птаха `bird1`–`bird7` або морську істоту `sea1`–`sea16`)
-2. Керуй спрайтом за допомогою **стрілок клавіатури** (праворуч, ліворуч, вгору, вниз)
-3. Додай змінну `speed` для **швидкості** — змінюй її для рівня складності
-4. Додай **границі екрану** — спрайт не повинен вилітати за край
-5. Додай **дію на клавішу Space** (наприклад: змініть колір, або спрайт мигне, або щось іще творче)
-6. Додай **фон** (небо, море, або обидва)
+1. Обери спрайт із категорії **sea** (морська істота)
+2. Намалюй **фон** — воду і дно
+3. Керуй спрайтом **стрілками клавіатури** (праворуч, ліворуч, вгору, вниз)
+4. Використай змінну **`speed`** для швидкості
+5. Додай **межі** — спрайт не повинен виходити за краї і заходити в дно
+6. Додай **дію на клавішу Space** — наприклад, змінити вигляд істоти або колір води
 
 **Приклад поведінки:**
 ```
-Гравець нажимає → → ↑
-Корабель рухається праворуч і вгору...
+Гравець натискає → → ↑
+Істота пливе праворуч і вгору...
+Досягає правого краю — і зупиняється
 Гравець натискає Space
-Корабель мигає або змінює вигляд...
+Істота змінює вигляд...
 ```
 
-**Підказка — змінна speed:**
+**Підказка — дія на Space:**
 
 ```python
-speed = 5    # швидкість в пікселях на кадр
-
-def update():
-    if keyboard.right:
-        player.x += speed
-    if keyboard.left:
-        player.x -= speed
-    if keyboard.up:
-        player.y -= speed
-    if keyboard.down:
-        player.y += speed
-```
-
-**Підказка — клавіша Space:**
-
-```python
-def update():
-    # ... рух ...
-    
     if keyboard.space:
-        # твоя дія: змініть спрайт, колір фону, звук тощо
-        player.image = 'sea4'  # приклад
+        fish.image = 'sea5'   # змінюємо спрайт
+```
+
+---
+
+## Для тих, хто впорався
+
+**Додай небо і птаха.**
+
+1. Намалюй смужку неба **над** водою — додай у `draw()` після `screen.fill(...)`:
+
+```python
+    screen.draw.filled_rect(Rect((0, 0), (640, 80)), "lightblue")
+```
+
+2. Створи другого актора **перед** `def draw()`:
+
+```python
+bird = Actor('bird1')
+bird.pos = (200, 40)
+```
+
+3. Намалюй птаха у `draw()`:
+
+```python
+    bird.draw()
+```
+
+4. Керуй птахом клавішами **W, A, S, D** — додай у `update()`:
+
+```python
+    if keyboard.w:  bird.y -= speed
+    if keyboard.s:  bird.y += speed
+    if keyboard.a:  bird.x -= speed
+    if keyboard.d:  bird.x += speed
+```
+
+5. Обмеж птаха зоною неба:
+
+```python
+    if bird.y < 0:   bird.y = 0
+    if bird.y > 70:  bird.y = 70
+    if bird.x < 0:   bird.x = 0
+    if bird.x > 640: bird.x = 640
 ```
 
 ---
@@ -58,75 +82,70 @@ def update():
 
 | Що | Код |
 |----|-----|
-| Створити Actor | `player = Actor('sea3')` |
-| Встановити позицію | `player.pos = (400, 300)` |
-| Змінити X координату | `player.x += 5` |
-| Змінити Y координату | `player.y += 5` |
-| Намалювати Actor | `player.draw()` |
+| Створити Actor | `fish = Actor('sea3')` |
+| Встановити позицію | `fish.pos = (320, 200)` |
+| Рух праворуч | `fish.x += speed` |
+| Рух ліворуч | `fish.x -= speed` |
+| Рух вгору | `fish.y -= speed` |
+| Рух вниз | `fish.y += speed` |
+| Намалювати Actor | `fish.draw()` |
+| Розворот | `fish.flip_x = True` |
 | Перевірити клавішу | `if keyboard.right:` |
 | Space клавіша | `if keyboard.space:` |
-| Залити екран кольором | `screen.fill((R,G,B))` |
-| Прямокутник | `screen.draw.filled_rect(Rect((x,y),(w,h)), (R,G,B))` |
-| Коло | `screen.draw.filled_circle((x,y), radius, (R,G,B))` |
-| Змінити спрайт | `player.image = 'sea5'` |
+| Змінити спрайт | `fish.image = 'sea5'` |
+| Залити екран | `screen.fill("steelblue")` |
+| Прямокутник | `screen.draw.filled_rect(Rect((x,y),(w,h)), "brown")` |
+
+**Кольори:**
+
+| Колір | Назва || Колір | Назва |
+|-------|-------|-|-------|-------|
+| Синій | `"blue"` | | Коричневий | `"brown"` |
+| Темно-синій | `"darkblue"` | | Жовтий | `"yellow"` |
+| Блакитний | `"lightblue"` | | Сірий | `"gray"` |
+| Зелений | `"green"` | | Білий | `"white"` |
 
 **Доступні спрайти:**
-- `bird1`, `bird2`, … `bird7` — птахи
-- `sea1`, `sea2`, … `sea16` — морські істоти
+- `sea1` … `sea16` — морські істоти
+- `bird1` … `bird7` — птахи
 - `sship5` — корабель
-- `things15`, `things17`, `things18` — різні предмети
-
-**Кольори (RGB):**
-
-| Колір | RGB || Колір | RGB |
-|-------|-----|-|-------|-----|
-| Чорний | `(0, 0, 0)` | | Блакитний | `(173, 216, 230)` |
-| Білий | `(255, 255, 255)` | | Темно-синій | `(34, 100, 200)` |
-| Червоний | `(255, 0, 0)` | | Коричневий | `(139, 69, 19)` |
-| Зелений | `(0, 200, 0)` | | Жовтий | `(255, 255, 0)` |
-| Синій | `(0, 0, 255)` | | Темно-зелений | `(34, 139, 34)` |
 
 **Структура програми:**
 
 ```python
 import pgzrun
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 640
+HEIGHT = 480
 
 speed = 5
-player = Actor('bird1')
-player.pos = (400, 300)
+fish = Actor('sea3')
+fish.pos = (320, 200)
 
 def draw():
-    screen.fill((173, 216, 230))
-    player.draw()
+    screen.fill("steelblue")
+    screen.draw.filled_rect(Rect((0, 400), (640, 80)), "tan")
+    fish.draw()
 
 def update():
-    global speed
-    
     if keyboard.right:
-        player.x += speed
+        fish.x += speed
+        fish.flip_x = False
     if keyboard.left:
-        player.x -= speed
+        fish.x -= speed
+        fish.flip_x = True
     if keyboard.up:
-        player.y -= speed
+        fish.y -= speed
     if keyboard.down:
-        player.y += speed
-    
+        fish.y += speed
+
     if keyboard.space:
-        # дія
-        pass
-    
-    # межи
-    if player.x < 0:
-        player.x = 0
-    if player.x > 800:
-        player.x = 800
-    if player.y < 0:
-        player.y = 0
-    if player.y > 600:
-        player.y = 600
+        pass   # твоя дія тут
+
+    if fish.x < 0:    fish.x = 0
+    if fish.x > 640:  fish.x = 640
+    if fish.y < 0:    fish.y = 0
+    if fish.y > 380:  fish.y = 380
 
 pgzrun.go()
 ```
