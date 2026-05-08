@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('smartTech');
+  return entries.map(e => ({ params: { id: String(e.data.lesson) } }));
+}
+
+const { id } = Astro.params;
+const lessonNum = parseInt(id!, 10);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const allEntries = await getCollection('smartTech');
+const entry = allEntries.find(e => e.data.lesson === lessonNum)!;
+const { Content } = await render(entry);
+
+const lessonEntries = allEntries.sort((a, b) => a.data.lesson - b.data.lesson);
+---
+<Layout pageTitle={entry.data.title}>
+  <div class="flex min-h-screen">
+    <nav class="no-print w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col">
+      <div class="p-4 border-b border-gray-200">
+        <a href={`${base}/`} class="text-xs text-gray-400 hover:text-gray-600 block mb-1">← Всі курси</a>
+        <a href={`${base}/smart-tech`} class="text-sm font-bold text-gray-800 leading-tight hover:text-green-700">Smart Tech / ШІ</a>
+      </div>
+      <ul class="flex-1 overflow-y-auto py-2">
+        {lessonEntries.map(e => (
+          <li>
+            <a
+              href={`${base}/smart-tech/${e.data.lesson}`}
+              class={`flex items-center px-4 py-2.5 text-sm transition-colors hover:bg-green-50 hover:text-green-700 ${
+                e.data.lesson === lessonNum
+                  ? 'bg-green-50 text-green-700 font-semibold border-r-2 border-green-600'
+                  : 'text-gray-700'
+              }`}
+            >
+              <span class="mr-2 text-xs font-mono text-gray-400">{String(e.data.lesson).padStart(2, '0')}</span>
+              {e.data.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <main class="flex-1 overflow-y-auto">
+      <div class="max-w-4xl mx-auto px-8 py-8">
+        <div class="flex justify-end mb-6 no-print">
+          <button
+            onclick="window.print()"
+            class="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Друк
+          </button>
+        </div>
+
+        <div class="prose max-w-none">
+          <Content />
+        </div>
+      </div>
+    </main>
+  </div>
+</Layout>

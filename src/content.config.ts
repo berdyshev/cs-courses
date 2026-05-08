@@ -1,8 +1,8 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const lessons = defineCollection({
-  loader: glob({ pattern: 'lesson*/**.md', base: '.' }),
+const pygameZero = defineCollection({
+  loader: glob({ pattern: 'pygame-zero/lesson*/**.md', base: '.' }),
   schema: z.object({
     lesson: z.number(),
     type: z.enum(['handout', 'homework']),
@@ -10,4 +10,12 @@ const lessons = defineCollection({
   }),
 });
 
-export const collections = { lessons };
+const smartTech = defineCollection({
+  loader: glob({ pattern: 'smart-tech/urok*.md', base: '.' }),
+  schema: z.object({
+    lesson: z.number(),
+    title: z.string(),
+  }),
+});
+
+export const collections = { pygameZero, smartTech };
