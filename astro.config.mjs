@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://berdyshev.github.io',
-  base: '/pgz-plan',
+  base: '/cs-courses',
   markdown: {
     shikiConfig: {
       theme: 'github-light',

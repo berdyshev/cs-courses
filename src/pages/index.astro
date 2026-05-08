@@ -1,4 +1,48 @@
 ---
+import Layout from '../layouts/Layout.astro';
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-return Astro.redirect(`${base}/lesson/1`);
+
+const courses = [
+  {
+    id: 'pygame-zero',
+    title: 'Python + Pygame Zero',
+    description: 'Програмування ігор на Python з бібліотекою Pygame Zero. Координати, спрайти, анімація, фізика.',
+    grade: '9 клас',
+    lessons: 6,
+    href: `${base}/pygame-zero`,
+    color: 'blue',
+  },
+  {
+    id: 'smart-tech',
+    title: 'Smart Tech / ШІ',
+    description: 'Інтернет речей, штучний інтелект, ризики та етика ШІ, розумне місто.',
+    grade: '8 клас',
+    lessons: 5,
+    href: `${base}/smart-tech`,
+    color: 'green',
+  },
+];
 ---
+<Layout>
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Матеріали з інформатики</h1>
+    <p class="text-gray-500 mb-10">Навчальні конспекти уроків для перегляду та друку</p>
+
+    <div class="grid gap-5">
+      {courses.map(course => (
+        <a
+          href={course.href}
+          class={`block p-6 bg-white rounded-xl border border-gray-200 hover:border-${course.color}-400 hover:shadow-sm transition-all`}
+        >
+          <div class="flex items-start justify-between mb-2">
+            <h2 class="text-xl font-semibold text-gray-900">{course.title}</h2>
+            <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{course.grade}</span>
+          </div>
+          <p class="text-gray-600 text-sm mb-4">{course.description}</p>
+          <span class="text-sm text-gray-400">{course.lessons} уроків →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
