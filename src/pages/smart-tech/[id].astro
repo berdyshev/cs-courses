@@ -57,6 +57,28 @@ const lessonEntries = allEntries.sort((a, b) => a.data.lesson - b.data.lesson);
           </button>
         </div>
 
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">{entry.data.title}</h1>
+
+        <div class="flex flex-wrap gap-3 mb-6 text-sm no-print">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full">
+            <span class="text-gray-400">Клас</span>
+            {entry.data.grade}
+          </span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-700 rounded-full">
+            <span class="text-gray-400">Тривалість</span>
+            {entry.data.duration}
+          </span>
+        </div>
+
+        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-gray-700 no-print">
+          <span class="font-semibold text-green-800 mr-2">Мета:</span>{entry.data.goal}
+        </div>
+
+        <div class="print-meta hidden">
+          <p><strong>Клас:</strong> {entry.data.grade} · <strong>Тривалість:</strong> {entry.data.duration}</p>
+          <p><strong>Мета:</strong> {entry.data.goal}</p>
+        </div>
+
         <div class="prose max-w-none">
           <Content />
         </div>
@@ -64,3 +86,9 @@ const lessonEntries = allEntries.sort((a, b) => a.data.lesson - b.data.lesson);
     </main>
   </div>
 </Layout>
+
+<style>
+  @media print {
+    .print-meta { display: block !important; margin-bottom: 8pt; font-size: 9pt; }
+  }
+</style>

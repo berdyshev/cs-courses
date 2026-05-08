@@ -15,6 +15,9 @@ const smartTech = defineCollection({
   schema: z.object({
     lesson: z.number(),
     title: z.string(),
+    grade: z.string(),
+    duration: z.string(),
+    goal: z.string(),
   }),
 });
 
