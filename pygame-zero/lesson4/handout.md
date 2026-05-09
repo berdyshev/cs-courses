@@ -72,7 +72,7 @@ y = random.randint(50, 360)   # ціле число від 50 до 360
 
 ---
 
-<img src="/pgz-plan/pgz-lesson4-qr.png" style="float: right; width: 120px; margin: 0 0 8px 16px;" />
+<img src="/cs-courses/pgz-lesson4-qr.png" style="float: right; width: 120px; margin: 0 0 8px 16px;" />
 
 **Крок 1. Стартова програма.** Відскануй QR-код або відкрий посилання, скопіюй увесь код і встав його в онлайн-редактор [https://ed-info.github.io/pgz/](https://ed-info.github.io/pgz/).
 
